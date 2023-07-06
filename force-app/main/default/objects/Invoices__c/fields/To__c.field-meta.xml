@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>To__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>Account__r.ShippingStreet +
+Account__r.ShippingCity +
+Account__r.ShippingState +
+Account__r.ShippingPostalCode +
+Account__r.ShippingCountry</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>To</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,18 @@
+<apex:page sidebar="false" standardController="Opportunity" lightningStyleSheets="true" showHeader="false">
+    <apex:includeLightning />
+    <!--Lightning Container-->
+    <div style="width:100%;height:500px;" id="LightningContainer"/>
+     
+    <script type="text/javascript">
+    //get account Id from URL
+    var accountId = "{!$CurrentPage.parameters.id}";
+
+    //Create Lightning Component
+    $Lightning.use("KT_XERO_Connect:SampleApp", function() {
+        $Lightning.createComponent("KT_XERO_Connect:InvoiceTable", 
+                                   { "accountId" : accountId }, //Pass Parameter
+                                   "LightningContainer", function(component) {
+                                   });
+    });
+    </script>
+</apex:page>

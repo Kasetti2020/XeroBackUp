@@ -1,0 +1,106 @@
+.THIS
+ .slds-modal__container{
+    max-width: 120rem !important;
+    width:90% !important;
+    max-height: 1500rem !important;
+    height:100% !important;
+}
+.THIS
+ .confirmation{
+    
+    width:50% !important;
+   
+    height:50% !important;
+   vertical-align:middle;
+}
+
+.THIS .toast-icon{
+   float: left;  
+    
+}
+.THIS
+.close-Button{
+    float: right;
+}
+.THIS
+ .select-Date{
+     
+    width:20% !important;
+   
+    height:50% !important;
+   vertical-align:middle;
+}
+.THIS
+.select-Date>.slds-modal__header{
+   background-color:#c2c2a3;
+   color:black;
+}
+.THIS
+ .contact-Created{
+   
+    width:20% !important;
+   
+    height:50% !important;
+   vertical-align:middle;
+}
+.THIS .contact-Created > .slds-modal__header{
+   background-color: #46d15d;
+}
+
+.THIS .invoice-Created{
+   width:20% !important;
+   
+   height:50% !important;
+  vertical-align:middle;
+}
+.THIS .invoice-Created > .slds-modal__header{
+   background-color: #46d15d;
+}
+.THIS
+ .slds-modal__header{
+    
+}
+.THIS
+ .slds-modal__header1{
+    height: 50px;
+     background-color: #000066;
+    font-style: bold;
+    font-size: x-large;
+    color: #ffffff;
+    padding-top: 10px;
+     text-align: center;
+}
+.THIS .xeroContactTable {
+    border-radius:50px;
+    height:400px;
+    width:1100px;
+    align:center; 
+    border: 1px solid black;
+}
+.THIS .contact_details_header{
+
+   padding-bottom:-15px;
+   background-color:#014486;
+    color:White
+        
+}
+
+.THIS .contact_details_header> .contact_cetails{
+   color: white;
+}
+
+.THIS .address_div{
+   border: 0.1px;
+   border-color: #b3cccc;
+}
+
+.THIS .invoice-detail-table{
+   height: 100px;
+}
+.THIS .invoice-detail-table>tr>td{
+   width: 16.66% ;
+}
+
+.THIS.strong-text {
+     font-weight: bold;
+}

@@ -1,0 +1,62 @@
+<apex:page standardController="Invoices__c" extensions="TrController" tabStyle="Opportunity" renderAs="pdf">
+     <h1 style="text-align:center;background-color: #E5E8D7;">Invoice Preview</h1>
+    <apex:pageBlock title="" rendered="{!$ObjectType.Invoices__c.accessible}"> 
+      <apex:repeat var="cases" value="{!TimeEntries}">
+        <table>
+<tr style="height:30px"><th style="font-size:17px;width:90px; text-align:left; vertical-align: super;">To</th>
+    <td style="font-size:15px">{!cases.KT_XERO_Connect__Account__r.name}<br/>
+        {!cases.KT_XERO_Connect__Account__r.ShippingStreet}<br/>
+        {!cases.KT_XERO_Connect__Account__r.ShippingCity} - {!cases.Account__r.ShippingPostalCode}<br/>
+        {!cases.KT_XERO_Connect__Account__r.ShippingState}
+        {!cases.KT_XERO_Connect__Account__r.ShippingCountry}<br/>
+        </td>
+    </tr>
+<tr style="height:30px"><th style="font-size:17px;width:90px">Invoice Number</th>
+    <td style="font-size:15px">{!cases.Name}</td>
+    </tr>
+            <tr style="height:30px"><th style="font-size:17px;width:90px">Date</th>
+    <td style="font-size:15px">{!cases.Date__c}</td>
+    </tr>
+            <tr style="height:30px"><th style="font-size:17px;width:90px">Issued</th>
+    <td style="font-size:15px">{!cases.Due_Date__c}</td>
+    </tr>
+
+</table>
+        </apex:repeat>
+        
+         <apex:pageBlockTable value="{!SOLIRecs}" var="records" border="1px" >  
+             
+             <apex:column style="width:450px;line-height: 14px;padding: 10px 10px 10px 10px;"> 
+                 <apex:facet name="header"><div style="padding: 10px 10px 10px 10px;background-color: #E5E8D7;">Description</div></apex:facet> 
+				<apex:outputText value="{!records.PricebookEntry.Name}"/> 
+			</apex:column> 
+                 <apex:column style="width:250px;padding: 10px 10px 10px 10px;" > 
+                     <apex:facet name="header"><div style="padding: 10px 10px 10px 10px;background-color: #E5E8D7;">Quantity</div></apex:facet> 
+				<apex:outputText value="{!records.Quantity}"/> 
+			</apex:column> 
+                  <apex:column style="width:250px;padding: 10px 10px 10px 10px;"> 
+                      <apex:facet name="header"><div style="padding: 10px 10px 10px 10px;background-color: #E5E8D7;">Unit Price</div></apex:facet> 
+				<apex:outputText value="{!records.UnitPrice}"/> 
+			</apex:column> 
+                   <apex:column style="width:250px;padding: 10px 10px 10px 10px;"> 
+                       <apex:facet name="header"><div style="padding: 10px 10px 10px 10px;background-color: #E5E8D7;">Amount INR</div></apex:facet> 
+				<apex:outputText value="{!records.TotalPrice}"/> 
+			</apex:column>   
+             
+        </apex:pageBlockTable>
+        <td>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+        <hr size="5px" color="black" style="margin-left: 470px;margin-top: -20px;"/>
+        
+         <apex:repeat var="cases" value="{!TimeEntries}" >
+             <table style="margin-top : -5px;">
+                     <tr style="margin-top : 200px; ">
+                         <th  style="font-size: 20px; padding-left: 470px;padding-right: 30px;"><b>Total</b></th>
+                         <td width="100%" style="font-size: 20px;background-color: #E5E8D7;"><b>{!cases.KT_XERO_Connect__Total__c}</b> </td>
+                     </tr>
+             </table>
+        </apex:repeat>
+        <hr size="5px" color="black" style="margin-left: 470px;margin-top: 5px;"/>
+    </apex:pageBlock>
+</apex:page>

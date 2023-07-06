@@ -1,0 +1,92 @@
+<aura:component controller="GetInvoiceList"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute name="lstInvoice" type="String[]" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="slds">
+        <div style="font-size:18px;font-weight:bold;margin-left:340px">
+            Invoice List
+        </div>
+        <aura:if isTrue="{!not(empty(v.lstInvoice))}">
+            <lightning:layout>
+                <lightning:layoutItem padding="around-small" size="12">
+                    <table border="2"
+                        class="slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer slds-table_fixed-layout">
+                        <thead>
+                            <tr class="slds-text-heading_label">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Invoice">Invoice</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Xero Contact">Xero Contact</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Invoice Date">Invoice Date</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Due Date">Due Date</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Total">Total</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Download">Download</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="body">
+                            <!-- Use the Apex model and controller to fetch server side data -->
+                            <aura:iteration items="{!v.lstInvoice}" var="invoice">
+                                <tr>
+                                    <td>
+                                        <div class="slds-truncate" title="{!invoice.Name}">{!invoice.Name}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="{!invoice.KT_XERO_Connect__Status__c}">
+                                            {!invoice.KT_XERO_Connect__Status__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="{!invoice.KT_XERO_Connect__Account__c}">
+                                            {!invoice.KT_XERO_Connect__Account__r.Name}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="{!invoice.KTDE__Date__c}">
+                                            {!invoice.KT_XERO_Connect__Date__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="{!invoice.KTDE__Due_Date__c}">
+                                            {!invoice.KT_XERO_Connect__Due_Date__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="{!invoice.KTDE__Total__c}">
+                                            {!invoice.KT_XERO_Connect__Total__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-text-align_center">
+                                            <button class="slds-button" onclick="{!c.downloadDocument}"
+                                                id="{!invoice.Id}">
+                                                <lightning:icon iconName="utility:download" alternativeText="Download"
+                                                    title="Click to download" size="x-small" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </lightning:layoutItem>
+            </lightning:layout>
+
+            <aura:set attribute="else">
+                <br />
+                <div class="slds-text-align_center" style="background-color:LightBlue">
+                    <b> No Invoice found in this Opportunity. </b>
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

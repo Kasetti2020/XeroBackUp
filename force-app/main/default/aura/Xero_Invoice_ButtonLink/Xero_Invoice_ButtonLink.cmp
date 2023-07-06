@@ -1,0 +1,233 @@
+<aura:component controller="Xero_InvoiceController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:availableForFlowScreens"
+    access="global">
+    <!-- Attributes -->
+    <!-- <aura:attribute name="IdVal" type="String" /> -->
+    <!-- <lightning:navigation aura:id="navService" /> -->
+    <!-- <aura:attribute name="jsonString" type="Object[]" default=" " /> -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false" />
+    <aura:attribute name="isAccountIdPresent" type="boolean" default="false" />
+    <aura:attribute name="childId" type="String" />
+    <aura:attribute name="oppDetails" type="Contact" />
+    <aura:attribute name="data" type="object" />    
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    <aura:attribute name="showConfirmDialog" type="boolean" default="false" />
+    <aura:attribute type="Date" name="dateEntered" />
+    <aura:attribute name="currentStep" type="string" default="1" />
+	
+    <!-- Spinner during data loading -->
+    <div class="spinnerHolder">
+        <aura:if isTrue="{! v.loaded }">
+            <aura:set attribute="else">
+                <lightning:spinner alternativeText="Loading" />
+            </aura:set>
+        </aura:if>
+    </div>
+
+    <div id="products-table" style="overflow-y:auto;max-height: 100vh;">
+
+        <!-- Progress Status indicator  -->
+        <lightning:progressIndicator currentStep="{!v.currentStep}" type="path">
+            <lightning:progressStep label="Create Xero Contact" value="1" />
+            <lightning:progressStep label="Billing Invoice details" value="2" />
+        </lightning:progressIndicator>
+
+        <br />
+
+        <aura:if isTrue="{! v.isAccountIdPresent }">
+            <table class="slds-table slds-table--bordered slds-table--striped xeroContactTable" align="center">
+                <thead>
+                    <header class="slds-modal__header contact_details_header">
+                        <h2 class="slds-text-heading_medium slds-hyphenate   ">
+                            Contact Details</h2>
+                    </header>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width:130px">
+                            <p><b>Account name</b></p>
+                            <lightning:input type="text" value="{!v.oppDetails.Account.Name}" disabled="true" variant = "label-hidden"/>
+                            
+                            
+                            <div class="address_div">
+                                <p><b> Street</b> </p>
+                                <lightning:input type="text" aura:id="street" required="true" value="{!v.oppDetails.Account.BillingStreet}" variant = "label-hidden" onchange="{!c.datacheck}" />
+                                <p><b> City</b> </p>
+                                <lightning:input type="text" aura:id="city" required="true"
+                                    value="{!v.oppDetails.Account.BillingCity}" onchange="{!c.datacheck}" variant = "label-hidden"/>
+                                <p><b> State</b> </p>
+                                <lightning:input type="text" aura:id="state" required="true"
+                                    value="{!v.oppDetails.Account.BillingState}" variant = "label-hidden" onchange="{!c.datacheck}" />
+                                <p><b> Country</b> </p>
+                                <lightning:input type="text" aura:id="country" required="true"
+                                    value="{!v.oppDetails.Account.BillingCountry}" variant = "label-hidden" onchange="{!c.datacheck}" />
+                                <p><b> Postal Code</b> </p>
+                                <lightning:input type="counter" aura:id="postalCode" required="true"
+                                    value="{!v.oppDetails.Account.BillingPostalCode}" variant = "label-hidden" onchange="{!c.datacheck}" />
+                                <p><b> Email</b> </p>
+                                <lightning:input type="email" aura:id="emailId" required="true"
+                                    value="{!v.oppDetails.Email}" placeholder="name@example.com" onchange="{!c.datacheck}" variant = "label-hidden"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <div align="center">
+                        <lightning:button variant="brand" label="Confirm" title="Confirm" value="{!v.oppDetails}"
+                            onclick="{!c.confirmCreateXeroContact}" />
+                        <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{! c.cancelButton }" />
+                    </div>
+                </tbody>
+            </table>
+        </aura:if>
+
+
+        <aura:if isTrue="{!v.isModalOpen}">
+            <header class="slds-modal__header billing-invoice">
+                <h2 class="slds-text-heading_medium slds-hyphenate">Billing Invoice</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_large">
+                <aura:iteration items="{!v.data}" var="data">
+                    <table class="invoice-detail-table" >
+                        <tr>
+                            <td>
+                                <p><b>To</b></p>
+                                <ui:outputText class="field" value="{!data.Account.Name}" /><br/>
+                                <ui:outputText class="field1" value="{!data.Account.BillingStreet}" />,<br/>
+                                <ui:outputText class="field1" value="{!data.Account.BillingCity}" />,<br/>
+                                <ui:outputText class="field1" value="{!data.Account.BillingState}" />.
+                            </td>
+                            <td>
+                                <p><b>Date</b></p>
+                                <ui:outputDate value="{!data.CreatedDate}" />
+                            </td>
+                            <td>
+                                <div>
+                                    <lightning:input type="Date" label="Due Date" value="{!v.dateEntered}" required="true"/>
+                                </div>
+                                
+                            </td>
+                            <td>
+                                <p><b>&nbsp; </b></p>
+                            </td>
+                            <td>
+                                <p><b></b></p>
+                            </td>
+                            <td>
+                                <p><b></b></p>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="slds-page-header" role="banner">
+                        <div class="slds-col slds-has-flexi-truncate">
+
+                            <!-- HEADING AREA -->
+                            <td>
+                                <lightning:icon iconName="utility:cart" alternativeText="Event" title="Event" />
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <h1 class="slds-page-header__title slds-truncate">Line Items</h1>
+                            </td>
+
+                        </div>
+                    </div>
+                    <table Style="border: 1px solid black;">
+                        <tr Style="border: 1px solid black;">
+                            <td Style="border: 1px solid black;text-align: center;">
+                                <b>Item Code</b>
+                            </td>
+                            <td Style="border: 1px solid black;text-align: center;">
+                                <b>Description</b>
+                            </td>
+                            <td Style="border: 1px solid black;text-align: center;">
+                                <b>Quantity</b>
+                            </td>
+                            <td Style="border: 1px solid black;text-align: center;">
+                                <b>Unit Price</b>
+                            </td>
+                            <td Style="border: 1px solid black;text-align: center;">
+                                <b>Discount</b>
+                            </td>
+                            <td Style="border: 1px solid black;text-align: center;">
+                                <b>Account</b>
+                            </td>
+                            <td Style="border: 1px solid black;text-align: center;">
+                                <b>Amount INR</b>
+                            </td>
+                            <td Style="border: 1px solid black;text-align: center">
+                                <b>Action </b>
+                            </td>
+                        </tr>
+
+                        <aura:iteration items="{!data.OpportunityLineItems}" var="childdata">
+                            <tr Style="border: 1px solid black;">
+                                <td Style="border: 1px solid black;">
+                                    <lightning:input type="text" value="{!childdata.ProductCode}" name="inputText"
+                                        disabled="true" />
+                                </td>
+                                <td Style="border: 1px solid black;">
+                                    <lightning:input type="text" value="{!childdata.Description}" name="inputText"
+                                        disabled="true" />
+                                </td>
+                                <td Style="border: 1px solid black;">
+                                    <lightning:input type="counter" value="{!childdata.Quantity}" min="1" name="{!childdata.Id}"
+                                        onblur="{!c.qtyChange}" />
+                                </td>
+                                <td Style="border: 1px solid black;">
+                                    <lightning:input type="text" value="{!childdata.UnitPrice}" name="inputText" disabled="true" />
+                                </td>
+                                <td Style="border: 1px solid black;">
+                                    <lightning:input type="counter" value="{!childdata.Discount}" min="0" max="100" name="{!childdata.Id}"
+                                        onblur="{!c.discountChange}" />
+                                </td>
+                                <td Style="border: 1px solid black;">
+                                    <lightning:select name="select1" value="{!childdata.KT_XERO_Connect__Account_Type__c}">
+                                        <option value="200">200 - Sales</option>
+                                        <option value="260">260 - Other Revenue</option>
+                                        <option value="270">270 - Interest Income</option>
+                                    </lightning:select>
+                                </td>
+                                <td Style="border: 1px solid black;">
+                                    <lightning:input type="text" value="{!childdata.TotalPrice}" name="inputText"
+                                        disabled="true" />
+                                </td>
+                                <td Style="border: 1px solid black;">
+                                    <lightning:buttonIcon aura:id="deleteButton" iconName="utility:close" size="small"
+                                        variant="border-filled" alternativeText="Close" name="{!childdata.Id}"
+                                        onclick="{! c.DeleteIndividualRetailerRow }" />
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </table>
+                </aura:iteration>
+            </div>
+            <!--Footer Starts here-->
+            <footer class="slds-modal__footer">
+                <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{! c.cancelButton }" />
+                <lightning:button variant="brand" label="Submit" title="Submit" value="{!v.data}" onclick="{!c.submitInvoiceDetails}" />
+            </footer>
+        </aura:if>
+
+        <aura:if isTrue="{!v.showConfirmDialog}">
+            <!--Product item delete Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open slds-align_absolute-center ">
+                <div class="slds-modal__container confirmation">
+                    <!--Modal Box Header Start-->
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading--medium">Confirmation</h1>
+                    </header>
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center><b>Are you sure you want to delete this item?</b></center>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button name='No' label='No' onclick='{!c.oppLineItemDeleteNo}' />
+                        <lightning:button variant="brand" name='Yes' label='Yes'
+                            onclick='{!c.oppLineItemDeleteYes}' />
+                    </footer>
+                    <!--Modal Box Button End-->
+                </div>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

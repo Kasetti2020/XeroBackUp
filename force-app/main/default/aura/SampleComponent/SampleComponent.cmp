@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction"  access="global">
+    <!--Declare Attributes-->
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="isVisionPopup" type="Boolean" default="false"/>  
+    <!--Declare Handlers-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.isVisionPopup}">
+    <c:Xero_Invoice_ButtonLink recordId="{!v.accountId}"/>
+    </aura:if>
+</aura:component>
